@@ -1,0 +1,67 @@
+/*
+=============
+Custom Mixins
+=============
+*/
+@mixin avenBook($size:1em, $lineHeight:1) {
+	font: normal normal normal #{$size}/#{$lineHeight} "Avenir LT W01 45 Book", Helvetica, Arial, sans-serif;
+}
+
+
+// Opacity that plays nice with IE
+@mixin cssOpacity($value) {
+	$hundreth: $value * 100;
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#00FFFFFF, endColorstr=#00FFFFFF) progid:DXImageTransform.Microsoft.Alpha(Opacity=#{$hundreth});
+	opacity: $value;
+}
+
+
+@mixin bg-gradient($fallback, $from, $to){
+	background: $fallback;
+	background: -webkit-gradient(linear, left top, left bottom, from($from), to($to));
+	background: -moz-linear-gradient(top,  $from,  $to);
+	background: -ms-linear-gradient(top,  $from,  $to);
+	filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr:#{$from}, endColorstr:#{$to});
+	background: gradient(linear,  top, bottom, from($from), to($to));
+}
+
+@mixin hacc{
+	-webkit-transform: translatez(0);
+    -moz-transform: translatez(0);
+    -ms-transform: translatez(0);
+    -o-transform: translatez(0);
+    transform: translatez(0);
+    -webkit-backface-visibility: hidden;
+	-webkit-perspective: 1000;
+}
+
+
+//https://github.com/zeezali/flex-image
+//http://zeezali.github.io/flex-image/
+@mixin flexImage( $containerWidth, $elemWidth, $elemHeight, $fileName, $fullSpriteName  ) {
+	$spriteWidth: strip-units( image-width(sprite-path($fullSpriteName)) );
+	$spriteHeight: strip-units( image-height(sprite-path($fullSpriteName)) );
+	$offsetX: abs( strip-units( nth(sprite-position($fullSpriteName, $fileName), 1) ) );
+	$offsetY: abs( strip-units( nth(sprite-position($fullSpriteName, $fileName), 2) ) );
+	$bgWidth: percentage( $spriteWidth / $elemWidth );
+	$bgHeight: percentage( $spriteHeight / $elemHeight );
+	$bgOffsetX: null;
+	$bgOffsetY: null;
+
+	@if $offsetX == 0 {
+		$bgOffsetX: 0;
+	} @else {
+		$bgOffsetX: percentage( $offsetX / ( $spriteWidth - $elemWidth ) );
+	}
+
+	@if $offsetY == 0 {
+		$bgOffsetY: 0;
+	} @else {
+		$bgOffsetY: percentage( $offsetY / ( $spriteHeight - $elemHeight ) );
+	}
+
+	width: percentage( $elemWidth / $containerWidth );
+	padding-top: percentage( $elemHeight / $containerWidth );
+	background-size: $bgWidth $bgHeight;
+	background-position: $bgOffsetX $bgOffsetY;
+}
